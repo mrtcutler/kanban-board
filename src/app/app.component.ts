@@ -1,10 +1,42 @@
-import { Component } from '@angular/core';
+import { CdkDragDrop, transferArrayItem } from "@angular/cdk/drag-drop";
+import { Component } from "@angular/core";
+import { Task } from "./task/models/task.model";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"]
 })
 export class AppComponent {
-  title = 'kanban-fire';
+  public inProgress: Task[] = [];
+  public done: Task[] = [];
+  public todo: Task[] = [
+    {
+      title: "Buy Milk",
+      description: "Go to the store and buy milk",
+    },
+    {
+      title: "Create Kanban App",
+      description: "Using Firebase and Angular to create a Kanban App!",
+    }
+  ];
+
+  public editTask(list: string, task: Task): void {
+
+  }
+
+  public drop(event: CdkDragDrop<Task[]>): void {
+    if (event.previousContainer === event.container) {
+      return;
+    }
+    if (!event.container?.data || !event.previousContainer?.data) {
+      return;
+    }
+    transferArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+  }
 }
