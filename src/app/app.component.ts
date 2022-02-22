@@ -1,11 +1,19 @@
 import { CdkDragDrop, transferArrayItem } from "@angular/cdk/drag-drop";
 import { Component } from "@angular/core";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { AngularFirestore, AngularFirestoreCollection } from "@angular/fire/compat/firestore";
 import { MatDialog } from "@angular/material/dialog";
-import { Observable } from "rxjs";
+import { BehaviorSubject, Observable } from "rxjs";
 import { TaskDialogResult } from "./task-dialog/interface/task-dialog-result.interface";
 import { TaskDialogComponent } from "./task-dialog/task-dialog.component";
 import { Task } from "./task/models/task.model";
+
+const getObservable = (collection: AngularFirestoreCollection<Task>) => {
+  const subject = new BehaviorSubject<Task[]>([]);
+  collection.valueChanges({ idField: 'id' }).subscribe((val: Task[]) => {
+    subject.next(val);
+  });
+  return subject;
+}
 
 @Component({
   selector: "app-root",
@@ -13,9 +21,9 @@ import { Task } from "./task/models/task.model";
   styleUrls: ["./app.component.css"]
 })
 export class AppComponent {
-  public done = this.store.collection('done').valueChanges({ idField: 'id'}) as Observable<Task[]>;
-  public inProgress = this.store.collection('inProgress').valueChanges({ idField: 'id'}) as Observable<Task[]>;
-  public todo = this.store.collection('todo').valueChanges({ idField: 'id'}) as Observable<Task[]>;
+  public done = getObservable(this.store.collection('done')) as Observable<Task[]>;
+  public inProgress = getObservable(this.store.collection('inProgress')) as Observable<Task[]>;
+  public todo = getObservable(this.store.collection('todo')) as Observable<Task[]>;
 
   constructor(
     private dialog: MatDialog,
