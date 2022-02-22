@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "kanban-board-2256e": {
+      "hosting": {
+        "kanban-fire": [
+          "kanban-board-2256e"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "kanban-board-2256e"
+  }
+}

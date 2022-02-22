@@ -37,3 +37,12 @@ mat-toolbar {
     text-align: center;
     opacity: 0.2;
   }
+
+  .cdk-drag-animating {
+    transition: transform 250ms;
+  }
+  
+  .cdk-drag-placeholder {
+    opacity: 0;
+  }
+  
